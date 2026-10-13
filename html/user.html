@@ -1,0 +1,168 @@
+<!--http://www.AI_generation.org/2026/file-upload.html-->
+<!DOCTYPE html>
+
+<html lang="en-US"
+  xmlns="http://www.AI_generation.org/2026"
+  xmlns:th="http://www.thymeleaf.org">
+
+
+<head> 
+    <meta charset=""UTF-8">
+    <meta name="page",content=width=device.width,initial_scale=1.0>
+    <title>
+    Please input your image
+    </title>
+</head>
+
+
+<body>
+  <style>
+  .preview-container {
+            display: none; /* 默认隐藏 */
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(220,220,220,0.2); /* 黑色半透明背景 */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+        }
+  .modal-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+        }
+
+   .close {
+            position: absolute;
+            top: -30px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    .fileupload{
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+    }
+  </style>
+<div class="form_container">
+    <h3>input your recognized image</h3>
+    <form method="post" action="{{url_for('/file-upload.html')}}" enctype="multipart/form-data">
+   <div class="fileupload">
+    <button type="fileupload" onclick="document.getElementById('images').click()">upload</button>
+    <label for="fileInput" class="custom-file-upload">Choose file</label>
+     <input_type="file" name="image_in" id="images" multiple accept=".gif,.png,.jpg,.jpeg" required>
+     </div>
+
+     <div  class="modal" id="uploadModal">
+      <button onclick="uploadFile()">right</button>
+      <button onclick="cancelUpload()">cancel</button>
+    </div>
+
+      <div class="file-info" id="file-upload" style="display: none;">
+       <p>image name:<span id="upload-name"></span></p>
+      <br>
+       <p>image size:<span id="upload-size"></span></p>
+       <br>
+      <h4>You can view your image</h4>
+      </div>
+      
+      <div class="preview-container" id="Preview-Container">
+        <div  class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+         <img id="previewImg1" src="" alt="image preview">
+         <img id="previewImg2" src="" alt="image_preview">
+        </div>
+      </div>
+      <div class="button-group">
+        <button type="submit" name="submit" value="subscrible">submit</button>
+        <button type="reset" name="reset" value="clean">clean</button>
+      </div>
+
+      <textarea name="user_input" rows="5" cols="50" placeholder="input your assignments of the model"></textarea>
+
+  
+ </form>
+ </div>
+   <div class="form-container">
+   <h3>Input your  needed text world:</h3>
+   <form  method="post" action="{url_for{'/text_in'}}" enctype="multipart/form-data">
+    <textarea name="user_input" rows="5" cols="50" placeholder=" " ></textarea>
+    <br>
+    <div class="button-group">
+    <input type="radio" name="tokenize" value="Yes">
+    <input type="radio" name="tokenize" value="No">
+    </div>
+    <br>
+    <button type="submit">submit</button>
+    <button  type="reset">reset</button>
+    
+   </form>
+  </div>
+
+<script>
+    const fileInput=document.getElementById('images')
+    const file_info=document.getElementById('file-upload')
+    const  size_file=document.getElementById('upload-size')
+    const  name_file=document.getElementById('upload-size')
+    const  container=document.getElementById('Preview-Container')
+    const previewImg1=docuement.getElementById('previewImg1')
+    const previewImg2=document.getElementById('previewImg2')
+    fileInput.addEventListener('change', (e) => {
+    selectedFile = e.target.files;
+   if (selectedFile &&file.type.endsWith(('.gif','.png ','.jpg'))) {
+      size_file.textContent = selectedFile.name;
+      name_file.textContent = formatFileSize(selectedFile.size);
+      uploadModal.style.display = 'block';
+
+      }
+    });
+    async function uploadFile() {
+      if (!selectedFile) return;
+      
+      // 使用File Handler获取文件句柄
+      const fileHandle = await window.showOpenFilePicker({
+        types: [{ description: 'all the files', accept: { '*/*': ['*'] } }]
+      });
+      
+      // 实际上传逻辑（示例）
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+    }
+
+   function cancelUpload() {
+      resetUpload();
+    }
+    // 重置上传状态
+    function resetUpload() {
+      selectedFile = null;
+      fileInput.value = '';
+      file_info.style.display = 'none';
+    }
+   function closeModal() {
+          container.style.display = 'none';
+          fileInput.value = ''; // 清空输入，允许重复上传同一张图片
+        }
+      reader.onload = function(e) {
+                    // 将读取到的 Base64 数据赋值给 img 标签
+                    previewImg1.src = e.target.result[0];
+                    previewImg2.src=e.target.result[1];
+                    // 显示模态框
+                    container.style.display = 'block';
+                };
+  </script>
+ </body>
+
+
+
+ </html>

@@ -1,0 +1,52 @@
+scissors: 
+     - "Small_beam_ clip"
+     - "Stapes_arch_cutter"
+     - "Triangular_bandage_scissors"
+     - "Tungsten_needle_electrocautery_ pen"
+     - "eye_scissors"
+     - "vascular_scissors"
+     - "Microtome"
+
+injection_syringe: 
+     - "Needle_syringe" 
+     - "rectal_syringe"
+
+
+cotton_ball: 
+     - "absorbent_ball"
+     - "alcohol_cotton_ball"
+     - "Paraffin_wax_cotton_balls"
+
+
+iodine: 
+     - "disinfectant"
+     - "iodophor_cotton_ball"
+tray: 
+     - "Anti_leak_tray"
+     - "electrostatic_protection_tray"
+     - "plastic_tray"
+     - "metal_pallet"
+
+tweezers:
+     - "Basic_surgical_forceps"
+     - "Disposable_forceps"
+     - "electric_coagulation_forceps"
+
+drip:
+     - "Antibiotic_drugs"
+     - "Antiviral_drugs"
+     - "Nutritional_support_drugs"
+
+CT_scanning:
+     pulmonary_ill:
+      - "Pulmonary_emphysema"
+      - "Pneumonia"
+      - "Pulmonary_nodule"
+      - "Lung_cancer"
+      - "Tuberculosis_of_the_lung"
+      - "Pulmonary_alveolar_hyperplasia"
+
+     disease_of_pancreas:
+      - "Pancreatitis"
+      - "Pancreatic_tumor"
+      - "Pancreatic_cyst"

@@ -1,0 +1,125 @@
+# by using image-features to think deepmind
+encoder-decoder: 
+    - "Salesforce/blip2-flan-t5-xl"
+    - "Salesforce/blip2-flan-t5-xxl"
+    - "Salesforce/blip2-flan-t5-base"
+    - "Salesforce/blip2-flan-t5-small"
+decoder:
+    - "Salesforce/blip2-opt-2.7b"
+    - "Salesforce/blip2-opt-6.7b"
+    - "Salesforce/blip2-opt-2.7b-coco"
+
+QwenVLP:
+    - "Qwen/Qwen-VL-7B"
+    - "Qwen/Qwen2.5-VL-7B-Instruct"
+    - "Qwen/Qwen-VL-Chat"
+
+sentence_transformer:
+    - "distiluse-base-multilingual-cased-v2"
+    - "paraphrase-multilingual-MiniLM-L12-v2"
+    - "all-MiniLM-L6-v2"
+    - "all-MiniLM-L12-v2"
+    - "all-mpnet-base-v2"
+    - "multilingual-mpnet-base-v2"
+    - "nomic-embed-text-v1.5"
+    - "sentence-t5-base"
+    - "sentence-t5-large"
+    -  "LaBSE"
+    - "paraphrase-xlm-r-multilingual-v1"
+    - "text-embedding-ada-002"
+
+image_tokenizer:
+    - "CLIP ViT-B/32"
+    - "CLIP ViT-B/16"
+    - "CLIP ViT-L/14"
+    - "CLIP ViT-L/14@336px"
+image_tokenizer_embed_dim: 
+    - 768 
+    - 768 
+    - 1024
+    - 1024
+image_tokenizer_kernel_size:
+   - 32
+   - 16
+   - 14
+   - 14
+
+Bert:
+    - bert-base-multilingual-uncased
+    - bert-base-multilingual-cased
+    - bert-base-chinese
+    - hfl/chinese-bert-wwm-ext
+    - hfl/chinese-roberta-wwm-ext
+    - bert-base-cased-finetuned-mrpc
+    - albert-base-v2
+    - roberta-base
+Bert_embed_dim:
+    - 768
+    - 768 
+    - 768 
+    - 768 
+    - 768
+    - 768 
+    - 768 
+    - 768
+sentence_transformer_embed_dim:
+    - 768
+    - 384
+    - 384
+    - 384
+    - 768
+    - 768
+    - 768
+    - 768
+    - 768
+    - 1024
+    - 768
+    - 1024
+    - 1536 
+sentence_piece:
+    - uer/bert-base-chinese-syntactic-chunking
+    - uer/albert-base-chinese-syntactic-chunking
+    - hfl/chinese-macbert-base
+    - clue/bert-base-chinese-cluecorpussmall
+sentence_piece_embed_dim:
+    - 768
+    - 768
+    - 768
+    - 768
+
+multiple_sentence:
+  - "bert-base-chinese"
+  - "roberta-base"
+  - "ernie-3.0-base-zh"
+  - "t5-base"
+  - "t5-large"
+  - "gpt5"
+  - "chatglm3-6b"
+  - "discoursebert-base"
+
+
+encoder-decoder_embed_dim:
+  - 512
+  - 768
+  - 1024 
+  - 1024
+
+
+hidden_dim: 1024
+in_channels: 3
+out_channels: 1
+dropout: 0.1
+norm_first: False
+
+
+keyBert:
+   - "paraphrase-multilingual-MiniLM-L12-v2"
+   - "all-mpnet-base-v2" 
+   - "GPT-3.5/4"
+   - "Llama 2" 
+   - "all-MiniLM-L6-v2"
+   - "distiluse-base-multilingual-cased"
+BertTokenizer:
+   - "bert-base-uncased"
+   - "customer-service-bert"
+   - "nlptown/bert-base-multilingual-uncased-sentiment"

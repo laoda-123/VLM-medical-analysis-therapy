@@ -1,0 +1,48 @@
+parameters:  # 搜索式使用关键词,使用标签
+ kernel_size: 14
+ num_heads: 8
+ stride: 14
+ num_attention_layers: 6
+ unet_depth: 5
+ image_channel: 3
+ lr: 0.0005
+ expansion: 3
+ padding: 0
+ gamma: 0.96
+ step: 20
+ batch-size: 100
+ database:
+  driver: "mysql"
+  hosts: 
+    - "localhost"
+    - "127.0.0.1"
+    - "10.151.92.217"
+  ports:
+    - 3306
+    - 1270
+  password:
+    - 5201314jntm
+  allowed_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+  username:
+    - root
+    - lanqiu
+pool:
+    min_size: 5      
+    max_size: 20    
+    timeout: 30      
+    idle_timeout: 600 
+    max_lifetime: 3600 
+frame_width: 224
+frame_height: 224
+
+actor_lr: 0.001
+critic_lr: 0.0004
+target_critic_lr: 0.001
+depth: 5
+in_channels: 3
+out_channels: 1 
+train_epoches: 10

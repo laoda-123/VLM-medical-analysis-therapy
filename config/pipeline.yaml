@@ -1,0 +1,38 @@
+model:
+   - "Stable Video Diffusion"
+   - "CogVideoX-5B"
+   - "HunyuanVideo“
+   - "Helios"
+   -  "FramePack"
+
+Stable Video Diffusion:
+  - "stabilityai/stable-video-diffusion-img2vid"
+  - "stabilityai/stable-video-diffusion-img2vid-xt"
+  - "stabilityai/stable-video-diffusion-img2vid-large"
+CogVideoX-5B:
+  - "CogVideoX-5B"
+  - "CogVideoX-5B-I2V"
+
+database:
+ driver: "sqlite3"
+ hostname: "ngm"
+ password: "12345678"
+ ports:
+    - 3306
+    - 1270
+ password:
+    - "5201314jntm"
+ allowed_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+ username:
+    - "root"
+    - "lanqiu"
+pool:
+    min_size: 5      
+    max_size: 20    
+    timeout: 30      
+    idle_timeout: 600 
+    max_lifetime: 3600 

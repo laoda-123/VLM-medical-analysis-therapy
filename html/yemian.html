@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.AI_generation.org/2026/xhtml"
+      xmlns:th="http://www.thymelaf.org"
+      lang="en-US">
+<meta>
+   <meta charset="UTF-8">
+   <meta name="page",content="width=device-width",initial_scale=1.0>
+
+<head>
+    <title>AI generation figure~recognition</title>]\
+    
+
+
+</head>
+<body>
+
+ 
+
+  <form  method="post" name="diff_input" action="{url_for{'/text_input'}}" enctype="multipart/form-data">
+    <textarea name="user_input" rows="5" cols="50" placeholder=" " >{{request.form.get('user_input','')}}</textarea>
+    <div class="button-group">
+      <button type="radio" name="tokenize" value="Yes">tokenize</button>
+      <button type="radio" name="tokenize" value="No">not_tokenize</button>
+    </div>
+    <button type="submit">submit</button>
+    <button  type="reset">reset</button>
+    
+
+</body>
+</html>

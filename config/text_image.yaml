@@ -1,0 +1,50 @@
+parameters:
+ kernel_size: 20
+ stride: 50
+ out_channel: 4
+ in_channels: 1
+ padding: 20
+ batch_size: 50
+ middle_block: 9
+ num_heads: 16
+ 
+database:
+  driver: "mysql"
+  hosts: 
+    - "localhost"
+    - "127.0.0.1"
+    - "10.151.92.217"
+  ports:
+    - 3306
+    - 1270
+  password:
+    - "5201314jntm"
+  allowed_methods:
+    - "GET"
+    - "POST"
+    - "PUT"
+    - "DELETE"
+  username:
+    - "root"
+    - "lanqiu"
+pool:
+    min_size: 5      
+    max_size: 20    
+    timeout: 30      
+    idle_timeout: 600 
+    max_lifetime: 3600 
+
+unet_depth: 6
+cross_attention_layers: 6
+image_channels: 4
+frame_width: 336
+frame_height: 336
+
+actor_lr: 0.0001
+critic_lr: 0.0001
+target_critic_lr: 0.0001
+alpha_lr: 0.00005
+gamma: 0.96
+alpha: 0.00005
+sigma: 0.70
+train_epoches: 8

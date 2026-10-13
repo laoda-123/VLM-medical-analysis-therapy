@@ -1,0 +1,418 @@
+<!--http://www.AI_generation.org/2026/-->
+<!DOCTYPE html>
+<html lang="en-US"
+  xmlns="http://www.AI_generation.org/2026"
+  xmlns:th="http://www.thymeleaf.org">
+  
+<head>
+
+   <meta charset=""UTF-8">
+   <title>train_input_variables</title>
+
+   </head>
+<body>
+   <style>
+   .form-container{max-width:1000px;
+    max-height: 1000px;
+    padding: 5px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+   }
+   .textArea{ width: 100%;
+  min-height: 120px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  
+  /* 视觉样式 */
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333333;
+   }
+   .number_input{ width: 100%;
+  min-height: 120px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  
+  /* 视觉样式 */
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333333;
+   }
+   .text{ width:100%;
+      max-height:100px;
+      box-sizing: border-box;
+   }
+   
+   .upload-btn {
+      padding: 10px 20px;
+      background: white;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .file-info {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f3f4f6;
+      border-radius: 4px;
+    }
+   .fileupload{padding: 10px 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+   }
+   .preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .preview-item {
+      position: relative;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 0.5rem;
+    }
+   .button-group{ border:1px solid blue;
+   }
+  .btn{
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 14px;
+   transition: background-color 0.2s ease;
+}
+
+   
+   </style>
+   <div class="former-container">
+  <!--http://www.AI_generation/2026/upload_image-->
+   <form method="post" action="{url_for{'/upload_image'}}">
+    <button type="fileupload" onclick="document.getElementById('fileInput').click()">upload</button>
+  <input type="file" id="fileInput" style="display: None" multiple accept=".gif,.png,.jpg,.jpeg" required>
+  
+
+   <div  class="modal" id="uploadModal">
+
+      <div class="file-info" id="file-upload" style="display: none;">
+       <p>image name:<span id="upload-name"></span></p>
+      <br>
+       <p>image size:<span id="upload-size"></span></p>
+       <br>
+        <button onclick="uploadFile()">right</button>
+      <button onclick="cancelUpload()">cancel</button>
+      </div>
+      <h4>You can view your image</h4>
+      </div>
+     
+
+
+   <div class="number-input">
+    <label>embed_dim</label>
+    <input type="number" name="embed_dim" place_holder="512" required>
+    </div>
+    <br>
+    
+
+    <div class="number-input">
+    <label>num_heads</label>
+    <input type="number" name="num_heads" place_holder="8" required>
+   </div>
+    <br>
+
+    <div class="number-input">
+    <label>patch_size</label>
+    <input type="number" name="patch_size" place_holder="20" required>
+    </div>
+    <br>
+    
+    <div class="radio-group">
+    <label>choose your image_channel</label>
+    
+    </div>
+    <br>
+   
+    <div class="number-input" >
+    <label>input your stride of training image</label>
+    <input type="number" name="stride" place_holder="20" required>
+   </div>
+    <br>
+   
+    <div class="number-input">
+    <label>input your number of the transfer layers</label>
+    <input type="number" name="num_transfer_layers" place_holder="8" required>
+    </div>
+    <br>
+    <div class="text">
+    <label>input your classification of  the image</label>
+    <input type="text" name="classification" place_holder="" required>
+    </div>
+    <br>
+    <div class="fileupload">
+    <button type="submit">submit</button>
+    <button type="reset">reset</button>
+    </div>
+ </form>
+</div>
+<script>
+ const fileInput=document.getElementById('fileInput')
+ const  fileInfo_upload=document.getElementById('file-upload')
+ const upload_file=document.getElementById('uploadModal')
+
+ const name_upload=document.getElementById('upload-size')
+ const size_upload=document.getElementById('upload-name')
+ const radio_group=document.getElementById('radio-group')
+ const image_channel=[ { id: 1,value: 2,name: "1" },
+ {id: 2, value: 2,name: "2"},
+ {id: 3, value:3, name:"3"},
+  {id: 4, value:4, name:"4"}
+ ];
+let selectedValue= image_channel[3]
+ image_channel.forEach(channel => {
+            // 创建选项容器
+            const item = document.createElement('div');
+            item.className = `image-radio-item ${channel.value === selectedValue ? 'selected' : ''}`;
+
+            // 创建隐藏的原生radio输入框
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'channel'; // 同一组单选框name必须相同
+            input.value = channel.value;
+            input.className = 'image-radio-input';
+            input.checked = channel.value === selectedValue;
+            const indicator = document.createElement('div');
+            indicator.className = 'selected-indicator';
+            indicator.textContent = '✓';
+
+            item.appendChild(input);
+            item.appendChild(name);
+            item.appendChild(indicator);
+            radioGroup.appendChild(item);
+fileInput.addEventListener('change', (e) => {
+    selectedFile = e.target.files;
+   if (selectedFile) {
+      name_upload.textContent = selectedFile.name;
+      size_upload.textContent = formatFileSize(selectedFile.size);
+      upload_file.style.display = 'block';
+
+      }
+    });
+     item.addEventListener('click', () => {
+                // 移除所有选中状态
+                document.querySelectorAll('.image-radio-item').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                // 设置当前选中状态
+                item.classList.add('selected');
+                input.checked = true;
+                selectedValue = channel.value;
+                // 触发自定义事件（可选，供外部监听选中变化）
+                radioGroup.dispatchEvent(new CustomEvent('channelChange', {
+                    detail: { value: selectedValue, name: channel.name }
+                }));
+            });
+          });
+    async function uploadFile() {
+      if (!selectedFile) return;
+      
+      // 使用File Handler获取文件句柄
+      const fileHandle = await window.showOpenFilePicker({
+        types: [{ description: 'all the files', accept: { '*/*': ['*'] } }]
+      });
+      
+      // 实际上传逻辑（示例）
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+    }
+
+   function cancelUpload() {
+      resetUpload();
+    }
+    // 重置上传状态
+    function resetUpload() {
+      selectedFile = null;
+      fileInput.value = '';
+      upload_file.style.display = 'none';
+    }
+ </script>
+
+<!--delete your image-->
+<div class="form-container">
+  <!--http://www.AI_generation/2026/delete-image-->
+   <form method="POST" action="{url_for{'/delete-image'}}">
+    <h3>Please input your delete image</h3>
+   <div class="text">
+   <label>delete the image?</label>
+   <input type="text" name="delete_image_type" id="delete_image" placeholder="" required>
+   </div>
+   <br>
+    <div class="button-group">
+    <button type="submit">submit</button>
+    <button type="reset">reset</button>
+    </div>
+  
+</form>
+</div> 
+
+ <!--update your image-->
+<div class="form-container">
+  <!--http://www.AI_generation/2026/update-image-->
+   <form method="POST" action="{url_for{'/update-image'}}">
+
+  <div class="fileupload">
+  <label>update your image</label>
+
+  <button type="fileupload" onclick="document.getElementById('update-file')".click()>upload</button>
+  <input  type="file" name="update-file" id="update-file" multiple accept=".gif,.png,.jpg, .jpeg" required>
+   <button class="update-file" id="update-file">Update</button>  
+  </div>
+
+  
+   
+  <div class=modal id="update-file">
+     <div class="file-info" id="info" style="display: none;">
+    <h4>Your image have chosen</h4>
+    <p>filename:<span id="fileName"></span></p>
+    <p>filesize:<span id="fileSize"></span></p>
+    <br>
+    <button onclick="uploadFile()">upload</button>
+    <button onclick="cancelUpload()">cancel</button>
+    </div>
+  </div>
+
+   <div class="button-group">
+   <button type="radio" name="add_delete_img" value="delete">delete</button>
+   <button type="radio" name="add_delete_img" value="add">add</button>
+   </div>
+
+    <div class="button-group">
+    <button type="submit">submit</button>
+    <button type="reset">reset</button>
+    </div>
+  </form>
+  </div>
+<script> 
+ const file_update=document.getElementById('update-file')
+ const file_name=document.getElementById('fileName')
+ const file_size=document.getElementById('fileSize')
+ const window=document.getElememtById('update-file')
+ const file_info=document.getElementById('info')
+  file_update.addEventListener('change', (e) => {
+    selectedFile = e.target.files;
+   if (selectedFile) {
+      file_name.textContent = selectedFile.name;
+      file_size.textContent = formatFileSize(selectedFile.size);
+      window.style.display = 'flex';
+
+      }
+    
+    async function uploadFile() {
+      if (!selectedFile) return;
+      
+      // 使用File Handler获取文件句柄
+      const fileHandle = await window.showOpenFilePicker({
+        types: [{ description: 'all the files', accept: { '*/*': ['*'] } }]
+      });
+      
+      // 实际上传逻辑（示例）
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+    }
+
+   function cancelUpload() {
+      resetUpload();
+    }
+    // 重置上传状态
+    function resetUpload() {
+      selectedFile = null;
+      file_update.value = '';
+      file_info.style.display = 'none';
+    }
+  });
+    </script>
+   
+   
+<button type="download" id="selectDirBtn" name="download">choose npz download path</button>
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-content">
+      <h3>determine your downloading catalog</h3>
+      <span id="dirName" name="dirName"></span>
+      <div class="modal-buttons">
+        <button class="btn" id="confirmBtn">download</button>
+        <button class="btn" id="cancelBtn">cancel</button>
+      </div>
+     </div>
+   </div>
+   
+   
+   <script>
+    const selectDirBtn = document.getElementById('selectDirBtn');
+    const confirmModal = document.getElementById('confirmModal');
+    const dirNameEl = document.getElementById('dirName');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+   
+   
+            // 弹出输入框让用户输入保存路径
+      selectDirBtn.addEventListener('click', async () => {
+      try {
+        const [dirHandle] = await window.showDirectoryPicker({ mode: 'readwrite' });
+        selectedDirHandle = dirHandle;
+        dirNameEl.textContent=dirHandle.name;
+        confirmModal.style.display = 'flex'; // 显示自定义弹窗
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('目录选择出错：', error);
+        }
+      }
+    
+    });
+   // ensure the downloading catalog
+    confirmBtn.addEventListener('click', () => {
+      confirmModal.style.display = 'none';
+      console.log('user have checked the download catalog:', selectedDirHandle.name);
+      // TODO: 执行下载逻辑
+      if (dirNameEl!=null){
+         const form = document.createElement('form');
+              form.method = 'POST';
+              form.action = '/download';
+          const savePathInput=document.createElementInput('input')
+          savePathInput.type='hidden'
+          savePathInput.name=dirNameEl
+          document.body.appendChild(form);
+          form.submit();
+          document.body.removeChild(form);
+      }
+    });
+
+    // cancal the downloading
+    cancelBtn.addEventListener('click', () =>{
+      confirmModal.style.display = 'none';
+      console.log('user cancel the downloading.');
+      // 可选：返回上一页 history.back();
+    });
+   
+    </script>
+
+  <div class="agree_to_exit">
+  <!--http://www.AI_generation/2026/agree_to_exit_database-->
+  <form method="POST" action="{url_for{'/agree_to_exit_database'}}">
+  <div  class="radio-group">
+   <button  type="submit" name="agree_to_exit_or_not" value="Yes">exit</button>
+   <button type="radio" name="agree_to_exit_or_not" value="No">stay</button>
+   </div>
+  </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!--http://www.AI_generation.org/2026/xhtml/output.html-->
+<!DOCTYPE html>
+<html  lang="zh-CN">
+<html xmlns="http://www.AI_generation.org/2026/xhtml"
+  xmlns:th="http:/www.thymeleaf.org">
+<head>
+  <title>Your output answer </title>
+  <link rel="stylesheet" th:href="@{/styles.css}" />
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.12.2/brython.min.js"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.12.2/brython_stdlib.js"></script> 
+  <style>
+        .container { width: 50%; margin: 5px auto; text-align: center; max-width:500px;max-height: 500px; }
+        #image { margin-top: 10px; padding: 10px; border: 1px solid #ddd; }
+   </style>
+</head>
+</body>
+ 
+ <div class="container">
+ 
+  <label>Your output image is</label>
+  <img id="preview-container" src="" alt="output image is">
+  <button onclick="refreshImage()">reload the image</button>
+  <script >
+const socket=io('yemian.html')
+  socket.on('image_updated', (data) => {
+    console.log(data.message);
+    refreshImage();
+  
+});
+function refreshImage() {
+    const imgElement = document.getElementById('preview-img');
+    const timestamp = new Date().getTime();
+    imgElement.src = '/processed_image?_=${timestamp}';
+}
+
+window.onload = refreshImage;
+</script>
+
+ </div>
+
+ <button type="download" id="selectDirBtn" name="download">choose image download path</button>
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-content">
+      <h3>determine your downloading catalog</h3>
+      <span id="dirName" name="dirName"></span>
+      <div class="modal-buttons">
+        <button class="btn btn-confirm" id="confirmBtn">download</button>
+        <button class="btn btn-cancel" id="cancelBtn">cancel</button>
+      </div>
+     </div>
+   </div>
+  
+   
+   <script>
+    const selectDirBtn = document.getElementById('selectDirBtn');
+    const confirmModal = document.getElementById('confirmModal');
+    const dirNameEl = document.getElementById('dirName');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+   
+   
+            // 弹出输入框让用户输入保存路径
+      selectDirBtn.addEventListener('click', async () => {
+      try {
+        const [dirHandle] = await window.showDirectoryPicker({ mode: 'readwrite' });
+        selectedDirHandle = dirHandle;
+        dirNameEl.textContent=dirHandle.name;
+        confirmModal.style.display = 'flex'; // 显示自定义弹窗
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('目录选择出错：', error);
+        }
+      }
+    
+    });
+   // ensure the downloading catalog
+    confirmBtn.addEventListener('click', () => {
+      confirmModal.style.display = 'none';
+      console.log('user have checked the download catalog:', selectedDirHandle.name);
+      // TODO: 执行下载逻辑
+      if (dirNameEl!=null){
+         const form = document.createElement('form');
+              form.method = 'POST';
+              form.action = '/download_user_image';
+          const savePathInput=document.createElementInput('input')
+          savePathInput.type='hidden'
+          savePathInput.name=dirNameEl
+          document.body.appendChild(form);
+          form.submit();
+          document.body.removeChild(form);
+      }
+    });
+
+    // cancal the downloading
+    cancelBtn.addEventListener('click', () =>{
+      confirmModal.style.display = 'none';
+      console.log('user cancel the downloading.');
+      // 可选：返回上一页 history.back();
+    });
+  </script>
+</body>
+</html>

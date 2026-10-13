@@ -1,0 +1,373 @@
+<!--http://www.AI_generation.org/2026/train_text-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta charset="UTF-8">
+<head>
+     <title>input your train image</title>
+</head>
+<body>
+  <style>
+     * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+    .fileupload{padding: 10px 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+   }
+   .preview-container {
+            display: none; /* 默认隐藏 */
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 80%; 
+            height: 80%; 
+            background-color: rgba(0,0,0,0.8); /* 黑色半透明背景 */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+        }
+  .file-info {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f3f4f6;
+      border-radius: 4px;
+    }
+   .radio-group {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            flex-wrap: wrap;
+        }
+  </style>
+  <div class="parameter">
+  <form method="POST" action="{url_for{'/insert_text'}}" enctype="multipart/form-data">
+  <label>input your train text</label>
+  <textArea  rows="5" cols="50" placeholder=" " name="train_text_input"></textArea>
+
+  <div class="fileupload">
+  <button type="file" onclick="document.getElementById('Inputfile').click()">upLoad your file</button>
+  <input type="file" name="fileInput" id="Inputfile" multiple accept=".gif,.png,.jpg,.jpeg" required>
+  </div>
+
+
+   <div  class="modal" id="uploadModal">
+<div class="fileInfo" id="upload-info" >
+   <p>image name:<span id="upload-name"></span></p>
+  <br>
+   <p>image size:<span id="upload-size"></span></p>
+   <br>
+      <button onclick="uploadFile()">right</button>
+      <button onclick="cancelUpload()">cancel</button>
+    </div>
+  </div>
+
+  <div class="file">
+  <input type="number" id="iterations" name="epoches" placeholder="1000">
+  <br>
+  <input type="number" id="lr" name="lr" placeholder="0.001">
+  <br>
+  <input type="number" id="train_factor" name="train_factor" placeholder="0.5">
+  <br>
+  <input type="number" id="kernal_size" name="kernal_size" placeholder="20">
+  <br>
+  <input  type="number" id="stride" name="stride" placeholder="50">
+  <input type="number" id="iterations" name="iterations" placeholder="50">
+  <input type="number" id="init_channel" name="init_channel" placeholder="1">
+  <input type="number" id="padding" name="padding" placeholder="20">
+</div>
+
+ <div class="button-group">  
+  <button class="submit" name="tokenize-text" value="Yes"></button>
+  <button class="reset" name="tokenize-text" value="No"></button>
+ </div>
+</form>
+      <div class="preview-container" id="Preview-Container">
+        <div  class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+         <img id="previewImg" src="" alt="image preview">
+         <img id="previewImg1" src="" alt="image preview">
+        </div>
+      </div>
+
+</div>
+ <script>
+  const fileInput=document.getElementById('Inputfile')
+  const file_info=document.getElementById('uploadModal')
+  const file_name=document.getElementById('upload-name')
+  const file_size=document.getElementById('upload-size')
+  const container=document.getElementById('Preview-Container')
+
+fileInput.addEventListener('change', (e) => {
+    selectedFile = e.target.files;
+   if (selectedFile) {
+      file_name.textContent = selectedFile.name;
+      file_size.textContent = formatFileSize(selectedFile.size);
+      file_info.style.display = 'flex';
+      } });
+    
+    async function uploadFile() {
+      if (!selectedFile) return;
+      // 使用File Handler获取文件句柄
+      const fileHandle = await window.showOpenFilePicker({
+        types: [{ description: 'all the files', accept: { '*/*': ['*'] } }]
+      });
+      
+      // 实际上传逻辑（示例）
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+    }
+
+   function cancelUpload() {
+      resetUpload();
+    }
+    // 重置上传状态
+    function resetUpload() {
+      selectedFile = null;
+      fileInput.value = '';
+      file_info.style.display = 'none';
+    }
+  function closeModal() {
+          container.style.display = 'none';
+          fileInput.value = ''; // 清空输入，允许重复上传同一张图片
+        }
+      reader.onload = function(e) {
+                    // 将读取到的 Base64 数据赋值给 img 标签
+                    previewImg.src = e.target.result[0];
+                    // 显示模态框
+                    container.style.display = 'block';
+                };
+  </script>
+
+
+
+</br>
+
+<div class="delete_types">
+  <label>delete your keywords</label>
+  <form  method="POST" action="{url_for{'/delete-types'}}" enctype="multipart/form-data>
+  <input type="text" id="delete-keywords" name="delete">
+  <div class="button-group">
+  <button type="submit" name="update">update</button>
+  <button type="reset" name="reset">cancel</button>
+  </div>
+  </form>
+</div>
+
+
+
+<div class="update_types">
+  <label> update your keywords</label>
+  <form method="POST" action="{url_for{'/update-types'}}" enctype="multipart/form-data>
+  <input  type="file" id="update-keywords" name="update" multiple accept=".gif,.png,.jpg.jpeg">
+
+  <div  class="modal" id="updateModal">
+ <div class="fileInfo" id="update-info" >
+   <p>image name:<span id="update-name"></span></p>
+  <br>
+   <p>image size:<span id="update-size"></span></p>
+   <br>
+      <button onclick="uploadFile()">right</button>
+      <button onclick="cancelUpload()">cancel</button>
+    </div>
+  </div>
+  <div class="Preview-Container">
+  <img id="Img",src="">
+  </div>
+  <div class="button-group">
+  <button class="submit" name="update" id=submit>update</button>
+  <button class="reset" name="not_update" id=reset>reset</button>
+</div>
+</form>
+</div>
+
+<script>
+  const update_file=document.getElementById('update')
+  const block=document.getElementById('updateModal')
+  const name_file=document.getElementById('update-name')
+  const size_file=document.getElementById('update-size')
+  const preview=document.getElementById('Preview-Container')
+  const upload_info=document.getElmentById('upload-info')
+fileInput.addEventListener('change', (e) => {
+    selectedFile = e.target.files;
+   if (selectedFile) {
+      name_file.textContent = selectedFile.name;
+      size_file.textContent = formatFileSize(selectedFile.size);
+      block.style.display = 'flex';
+      } });
+    
+    async function uploadFile() {
+      if (!selectedFile) return;
+      // 使用File Handler获取文件句柄
+      const fileHandle = await window.showOpenFilePicker({
+        types: [{ description: 'all the files', accept: { '*/*': ['*'] } }]
+      });
+      
+      // 实际上传逻辑（示例）
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+    }
+
+   function cancelUpload() {
+      resetUpload();
+    }
+    // 重置上传状态
+    function resetUpload() {
+      selectedFile = null;
+      update_file.value = '';
+      block.style.display = 'none';
+    }
+  function closeModal() {
+          preview.style.display = 'none';
+          fileInput.value = ''; // 清空输入，允许重复上传同一张图片
+        }
+      reader.onload = function(e) {
+                    // 将读取到的 Base64 数据赋值给 img 标签
+                    preview.src = e.target.result[0];
+                    // 显示模态框
+                    preview.style.display = 'block';
+                };
+</script>
+
+<br>
+<div class="download">
+<button type="download" id="selectDirBtn" name="download">choose npz download path</button>
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-content">
+      <h3>determine your downloading catalog</h3>
+      <span id="dirName" name="dirName"> </span>
+      <div class="modal-buttons">
+        <button class="btn btn-confirm" id="confirmBtn">download</button>
+        <button class="btn btn-cancel" id="cancelBtn">cancel</button>
+      </div>
+     </div>
+   </div>
+</div>
+
+
+<div class="config">
+
+<button type="config" id="Config_btn" name="config_download">Config_path</button>
+ <div class="modal-overlay" id="modelSelection" name="config">choose your config path</div>
+ <div class="modal-content">
+ <h3> determine your model config</h3>
+ <span id="configDir" name="config"> </span>
+  <div  class="modal_button">
+   <button class="btn btn-confirm" id="ensurement">download</button>
+   <button class="btn btn-cancel" id="clear">cancel</button>
+  </div>
+ </div>
+ 
+</div>
+
+</div>
+
+
+<script>
+    const selectDirBtn = document.getElementById('selectDirBtn');
+    const confirmModal = document.getElementById('confirmModal');
+    const dirNameEl = document.getElementById('dirName');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    const config_btn=document.getElementById('Config_btn');
+    const model_select=document.getElementById('modelSelection');
+    const config_dir=document.getElementById('configDir')
+    const ensure=document.getElementById('ensurement')
+    const cancel=document.getElementById('clear')
+
+            // 弹出输入框让用户输入保存路径
+    selectDirBtn.addEventListener('click', async () => {
+      try {
+        const [dirHandle] = await window.showDirectoryPicker({ mode: 'readwrite' });
+        selectedDirHandle = dirHandle;
+        dirNameEl.textContent=dirHandle.name;
+        confirmModal.style.display = 'flex'; // 显示自定义弹窗
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('目录选择出错：', error);
+        }
+      }
+    });
+
+     config_btn.addEventListener('click', async () => {
+      try {
+        const [dirHandle] = await window.showDirectoryPicker({ mode: 'readwrite' });
+        selectedDirHandle = dirHandle;
+        config_dir.textContent=dirHandle.name;
+        model_select.style.display = 'flex'; // 显示自定义弹窗
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('目录选择出错：', error);
+        }
+      }
+    });
+
+
+   // ensure the downloading catalog
+    confirmBtn.addEventListener('click', () => {
+      confirmModal.style.display = 'none';
+      console.log('user have checked the download catalog:', selectedDirHandle.name);
+      // TODO: 执行下载逻辑
+      if (dirNameEl!=null){
+         const form = document.createElement('form');
+              form.method = 'POST';
+              form.action = '/download_npz';
+          const savePathInput=document.createElementInput('input')
+          savePathInput.type='hidden';
+          savePathInput.name=dirNameEl;
+          document.body.appendChild(form);
+          form.submit();
+          document.body.removeChild(form);
+      }
+    });
+
+    // cancal the downloading
+    cancelBtn.addEventListener('click', () =>{
+      confirmModal.style.display = 'none';
+      console.log('user cancel the downloading.');
+      // 可选：返回上一页 history.back();
+    });
+
+
+     ensure.addEventListener('click', () => {
+      model_select.style.display = 'flex';
+      console.log('user have checked the download catalog:', selectedDirHandle.name);
+      // TODO: 执行下载逻辑
+      if (config_dir!=null){
+         const form = document.createElement('form');
+              form.method = 'POST';
+              form.action = '/config';
+          const savePathInput=document.createElementInput('input')
+          savePathInput.type='hidden';
+          savePathInput.name=config_dir;
+          document.body.appendChild(form);
+          form.submit();
+          document.body.removeChild(form);
+      }
+    });
+
+    // cancal the downloading
+    cancelBtn.addEventListener('click', () =>{
+      model_select.style.display = 'none';
+      console.log('user cancel the downloading.');
+      // 可选：返回上一页 history.back();
+    });
+
+
+   
+    </script>
+
+  <div class="message" >
+  <textfield>{message}</textfield>
+  </div>
+
+</body>
+
+
+</html>
